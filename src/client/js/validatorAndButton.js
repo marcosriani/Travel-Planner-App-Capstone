@@ -6,7 +6,7 @@ function validatorAndButton(formText) {
   // Checking function for the user input
   const checking = (condition) => {
     if (condition) {
-      textTooShortParagraph.textContent = 'Text too short! Please enter text';
+      textTooShortParagraph.textContent = 'Text too short! Please enter city';
       textTooShortDiv.style.display = 'block';
       setTimeout(() => {
         textTooShortDiv.style.display = 'none';

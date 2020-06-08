@@ -14,12 +14,37 @@ function handleSubmit(event) {
 
   //  text was put into the form field
   const formField = document.getElementById('name');
-  const formText = formField.value;
+  let formText = formField.value;
+
   let formtTextObj = { textInput: formField.value };
+  if (formText === '') {
+    alert('Please enter a city name. We suggest London why not?');
+    formtTextObj = { textInput: 'london' };
+  }
 
   // data input from the data field
-  const dataField = document.getElementById('tripDate');
-  console.log(dataField.value);
+  const dateField = document.getElementById('tripDate');
+  const dateText = dateField.value;
+
+  let correctDate = '';
+  if (dateText.length === 10) {
+    let d = new Date(dateText);
+    const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
+    const mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(d);
+    const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+
+    correctDate = `${da}-${mo}-${ye}`;
+  } else {
+    alert('Please enter a departing date');
+  }
+  // Calculating time remaining
+  const timeLeft = (endtime) => {
+    // remaining time until the deadline.
+    const total = Date.parse(endtime) - Date.parse(new Date());
+    const days = Math.floor(total / (1000 * 60 * 60 * 24));
+
+    return days;
+  };
 
   // Execute button clicked function
   Client.validatorAndButton(formText);
@@ -56,47 +81,49 @@ function handleSubmit(event) {
   };
 
   // Posting input text into server so that it's used as a query term in the APIs
-  postData('http://localhost:3000/query', formtTextObj).then((data) => {
-    getAllData().then((data) => {
-      // To return always the latest data
-      const latestGeoData = data.geoData[data.geoData.length - 1];
-      const latestWeatherData = data.weatherData[data.weatherData.length - 1];
-      const latestImageData = data.pixabayImages[data.pixabayImages.length - 1];
+  // Checking if date is set
+  dateText.length === 10
+    ? postData('http://localhost:3000/query', formtTextObj).then((data) => {
+        getAllData().then((data) => {
+          // To return always the latest data
+          const latestGeoData = data.geoData[data.geoData.length - 1];
+          const latestWeatherData =
+            data.weatherData[data.weatherData.length - 1];
+          const latestImageData =
+            data.pixabayImages[data.pixabayImages.length - 1];
 
-      console.log(latestGeoData);
-      console.log(latestWeatherData);
-      console.log(latestImageData);
+          const cityTrip = latestGeoData.city;
+          const countryTrip = latestGeoData.countryCode;
 
-      const cityTrip = latestGeoData.city;
-      const countryTrip = latestGeoData.countryCode;
-      const date = latestWeatherData.weatherPerDay[0].dateTime;
-      const howFar = '20';
-      const tripWeatherMax = latestWeatherData.weatherPerDay[0].appMaxTemp;
-      const tripWeatherMin = latestWeatherData.weatherPerDay[0].appMinTemp;
-      const tripWeatherDescription =
-        latestWeatherData.weatherPerDay[0].weatherDescription;
-      const imageTrip = latestImageData.imageURL;
+          const date = correctDate;
 
-      cleanUi();
-      updateUI(
-        imageTrip,
-        cityTrip,
-        countryTrip,
-        date,
-        howFar,
-        tripWeatherMax,
-        tripWeatherMin,
-        tripWeatherDescription
-      );
+          const howFar = timeLeft(dateText);
+          const tripWeatherMax = latestWeatherData.weatherPerDay[0].appMaxTemp;
+          const tripWeatherMin = latestWeatherData.weatherPerDay[0].appMinTemp;
+          const tripWeatherDescription =
+            latestWeatherData.weatherPerDay[0].weatherDescription;
+          const imageTrip = latestImageData.imageURL;
 
-      console.log(data);
-    });
-  });
+          cleanUi();
+          updateUI(
+            imageTrip,
+            cityTrip,
+            countryTrip,
+            date,
+            howFar,
+            tripWeatherMax,
+            tripWeatherMin,
+            tripWeatherDescription
+          );
+        });
+      })
+    : null;
 
   // Clean UI
   const cleanUi = () => {
     // Wrapper div
     formField.value = '';
+    dateField.value = '';
     const tripDiv = document.querySelector('#trip');
     tripDiv.innerHTML = '';
   };
@@ -185,21 +212,19 @@ function handleSubmit(event) {
 
     // Trip is days from now
     const daysFromNowDiv = element().div;
-    const h2 = element().h2;
+    const daysFromNowP = element().p;
     const daysFromNowSpan1 = element().span;
     const daysFromNowSpan2 = element().span;
 
     daysFromNowDiv.classList = 'daysFromNowDiv';
-    daysFromNowSpan1.classList = 'numberOfDays';
-    daysFromNowSpan2.classList = 'endOfh2';
 
-    h2.innerHTML = `${cityName} is`;
+    daysFromNowP.innerHTML = `${cityName} is `;
     daysFromNowSpan1.innerHTML = daysFromNow;
-    daysFromNowSpan2.innerHTML = 'days away.';
+    daysFromNowSpan2.innerHTML = ' days away.';
 
-    daysFromNowDiv.appendChild(h2);
-    daysFromNowDiv.appendChild(daysFromNowSpan1);
-    daysFromNowDiv.appendChild(daysFromNowSpan2);
+    daysFromNowDiv.appendChild(daysFromNowP);
+    daysFromNowP.appendChild(daysFromNowSpan1);
+    daysFromNowP.appendChild(daysFromNowSpan2);
     wrapperDiv2.appendChild(daysFromNowDiv);
 
     // Weather for then
