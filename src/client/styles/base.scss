@@ -2,7 +2,12 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: rgba(227, 245, 250, 0.253);
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    url('../media/background.jpg');
+
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 }
 
 main {
@@ -26,7 +31,7 @@ main {
 main {
   #result,
   p {
-    padding: 10px 30px;
+    padding: 4px 30px;
     font-size: 17px;
     line-height: 1.5;
   }
@@ -48,12 +53,12 @@ main {
 section {
   max-width: 800px;
   margin: 40px auto;
-  background-color: white;
+  // background-color: rgba(244, 250, 252, 0.836);
   border-radius: 10px;
 }
 section {
   button {
-    background-color: rgba(227, 245, 250, 0.253);
+    background-color: rgba(195, 238, 250, 0.253);
     color: rgba(56, 56, 56, 0.842);
     border-radius: 10px;
     padding: 5px;
@@ -71,7 +76,7 @@ section {
 
 section {
   button:hover {
-    background-color: rgba(1, 129, 161, 0.452);
+    background-color: rgba(2, 141, 175, 0.452);
     display: block;
   }
 }
@@ -108,4 +113,47 @@ section {
     align-content: center;
     height: 100%;
   }
+}
+
+// New code
+#trip {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid rgba(166, 225, 240, 0.288);
+  background-color: rgba(253, 253, 253, 0.774);
+  border-radius: 3px;
+  padding: 20px;
+  width: 100%;
+  margin: 0 auto;
+  border-radius: 10px;
+}
+
+.tripResult {
+  display: none;
+  padding-bottom: 20px;
+  width: 93%;
+}
+
+.wrapperDiv2 {
+  padding: 15px;
+}
+
+.imageDiv {
+  width: 100%;
+  height: auto;
+}
+
+.imageDiv {
+  img {
+    width: 100%;
+  }
+}
+
+.headerInfo {
+  border: 1px solid rgba(166, 225, 240, 0.288);
+  border-bottom: none;
+  background-color: rgba(253, 253, 253, 0.774);
+  width: 93%;
+  margin: 0 auto;
+  border-radius: 10px 10px 0 0;
 }

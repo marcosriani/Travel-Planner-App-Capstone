@@ -27,21 +27,28 @@
 
         <main>
             <section>
-                <h1>Travel Planner</h1>
-                <div class="description"><p>Search for your desired trip location and choose a date, you will get back some weather weather information and an inspiring image of the location, along with some cool info.</p>
+                <div class="headerInfo">
+                    <h1>Travel Planner</h1>
+                    <div class="description"><p>Search for your desired trip location and choose a date, you will get back some weather weather information and an inspiring image of the location, along with some cool info.</p>
+                    </div>
+                    <div class="text-too-short"><p class="text-too-short-p"></p></div>
+                    <div class="button-instructions"><button class="button">Show instruction</button></div>    
                 </div>
-                <div class="text-too-short"><p class="text-too-short-p"></p></div>
-                <div class="button-instructions"><button class="button">Show instruction</button></div>
                 <form class="" onsubmit="return Client.handleSubmit(event)">
-                    <input id="name" type="text" name="input" value=""  placeholder="Insert text or url here">
+                    <label for="name">My trip to:</label>
+                    <input id="name" type="text" name="input" value=""  placeholder="Trip location">
+                    <label for="tripDate">Departing:</label>
+                    <input type="date" id="tripDate" name="tripDate">
                     <input type="submit" name="" value="submit" onclick="return Client.handleSubmit(event)" onsubmit="return Client.handleSubmit(event)">
                 </form>
             <section>
 
-            <section>
-               <p> <strong class="result-title">Result of Analysis:</strong></p>
+            <section class="tripResult">
 
                 <div id='result'></div>
+                <div id='trip'>
+
+                </div>
 
             </section>
         </main>

@@ -1,13 +1,14 @@
 form {
-  border: 1px solid rgba(196, 232, 241, 0.452);
-  background-color: rgba(240, 248, 250, 0.452);
+  border: 1px solid rgba(166, 225, 240, 0.288);
+  border-top: none;
+  background-color: rgba(253, 253, 253, 0.774);
   border-radius: 3px;
-  padding: 40px;
+  padding: 10px 40px 40px 40px;
   width: 93%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  border-radius: 10px;
+  border-radius: 0 0 10px 10px;
 }
 
 input {

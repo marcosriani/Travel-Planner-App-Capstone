@@ -1,4 +1,4 @@
-function validatorAndButton(formText, resultTitle, containerDiv) {
+function validatorAndButton(formText) {
   // Validating the text input
   const textTooShortDiv = document.querySelector('.text-too-short');
   const textTooShortParagraph = document.querySelector('.text-too-short-p');
@@ -8,13 +8,10 @@ function validatorAndButton(formText, resultTitle, containerDiv) {
     if (condition) {
       textTooShortParagraph.textContent = 'Text too short! Please enter text';
       textTooShortDiv.style.display = 'block';
-      resultTitle.style.display = 'none';
-      containerDiv.style.display = 'none';
       setTimeout(() => {
         textTooShortDiv.style.display = 'none';
       }, 1500);
     } else {
-      containerDiv.style.display = 'block';
       textTooShortDiv.style.display = 'none';
     }
   };
@@ -23,7 +20,7 @@ function validatorAndButton(formText, resultTitle, containerDiv) {
   checking(formText.match(/^[0-9]+$/));
 
   // Checking if input text is long enough for good results
-  checking(formText.length < 35);
+  checking(formText.length < 1);
 
   const buttonShowInstructions = document.querySelector('.button');
   const instructions = document.querySelector('.description');
