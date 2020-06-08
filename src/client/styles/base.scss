@@ -1,0 +1,111 @@
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: rgba(227, 245, 250, 0.253);
+}
+
+main {
+  flex: 2;
+}
+
+main {
+  h1 {
+    margin: 10px 15px 0 0;
+    text-align: center;
+    padding-top: 30px;
+    padding-bottom: 25px;
+    font-size: 27px;
+  }
+}
+main {
+  .description {
+    padding: 15px;
+  }
+}
+main {
+  #result,
+  p {
+    padding: 10px 30px;
+    font-size: 17px;
+    line-height: 1.5;
+  }
+}
+main {
+  #result {
+    div {
+      padding-bottom: 7px;
+    }
+  }
+}
+.logo img {
+  margin-left: 50px;
+  margin-top: 15px;
+  margin-bottom: 0;
+  width: 50px;
+  height: 50px;
+}
+section {
+  max-width: 800px;
+  margin: 40px auto;
+  background-color: white;
+  border-radius: 10px;
+}
+section {
+  button {
+    background-color: rgba(227, 245, 250, 0.253);
+    color: rgba(56, 56, 56, 0.842);
+    border-radius: 10px;
+    padding: 5px;
+    margin-right: 30px;
+    margin-bottom: 20px;
+    display: none;
+  }
+}
+
+section {
+  button:focus {
+    outline: none;
+  }
+}
+
+section {
+  button:hover {
+    background-color: rgba(1, 129, 161, 0.452);
+    display: block;
+  }
+}
+
+section {
+  .button-instructions {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+section {
+  p strong {
+    display: none;
+  }
+}
+section {
+  .text-too-short {
+    color: red;
+    border: 1px solid rgba(1, 129, 161, 0.452);
+    background-color: rgba(196, 232, 241, 0.452);
+    width: 280px;
+    margin-bottom: 20px;
+    justify-content: center;
+    margin: 15px auto;
+    display: none;
+    height: 50px;
+    align-content: center;
+  }
+}
+section {
+  .text-too-short p {
+    justify-content: center;
+    align-content: center;
+    height: 100%;
+  }
+}

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link
+        class="logo-window"
+        href="../../../assets/coding.png"
+      rel="shortcut icon"
+      type="image/x-icon"
+    />
+        <title>Travel App</title>
+    </head>
+
+    <body>
+
+        <header>
+            <div class="logo">
+                <img class="logo-page" src="../../../assets/coding.png" />
+              </div>
+              <nav class="nav">
+                  <ul>
+                      <a href="https://github.com/marcosriani" target="_blank" class="nav-link"><li>Other Projects</li></a>
+                  </ul>
+              </nav>
+        </header>
+
+        <main>
+            <section>
+                <h1>Travel App</h1>
+                <div class="description"><p>Extracting sentiment from a piece of text such as a tweet, a review or an article can provide us with valuable insight about the author's emotions and perspective.</p>
+                    <p>The tone can be <b>positive</b>,<b> neutral</b> or <b>negative</b>, and whether the text is <b>subjective</b> (meaning it's reflecting the author's opinion) or <b>objective </b>(meaning it's expressing a fact). Our Sentiment Analysis endpoint is built exactly for this purpose.
+                         Learn more about Aylien API <a href="https://docs.aylien.com/" target="_blank">here</a></p>
+                </div>
+                <div class="text-too-short"><p class="text-too-short-p"></p></div>
+                <div class="button-instructions"><button class="button">Show instruction</button></div>
+                <form class="" onsubmit="return Client.handleSubmit(event)">
+                    <input id="name" type="text" name="input" value=""  placeholder="Insert text or url here">
+                    <input type="submit" name="" value="submit" onclick="return Client.handleSubmit(event)" onsubmit="return Client.handleSubmit(event)">
+                </form>
+            <section>
+
+            <section>
+               <p> <strong class="result-title">Result of Analysis:</strong></p>
+
+                <div id='result'></div>
+
+            </section>
+        </main>
+
+        <footer>
+            <p>
+              ©Copyright 2020 by Marcos Riani
+            </p>
+            <div>
+              <a href="https://www.linkedin.com/in/marcosriani/" target="_blank"><img  src="../../../assets/linkedin.png" alt="Linkedin" class="linkedin" /></a>
+              <a href="https://github.com/marcosriani" target="_blank"><img src="../../../assets/github.png"  alt="GitHub" class="github"/></a>
+              <a href="https://twitter.com/marcos_riani" target="_blank"><img src="../../../assets/twitter.png" alt="Twitter" class="twitter" /></a>
+            </div>
+          </footer>
+
+
+          
+    </body>
+</html>
+
+
