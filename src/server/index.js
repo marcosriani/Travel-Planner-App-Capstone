@@ -2,11 +2,8 @@
 const dotenv = require('dotenv');
 dotenv.config();
 
-// envVariable = {
-//   username: process.env.KEY1,
-//   weaterkey: process.env.KEY2,
-//   pixalkey: process.env.KEY3,
-// };
+// A light-weight module that brings window.fetch to Node.js
+const fetch = require('node-fetch');
 
 // Require Express to run server and routes, and other dependencies
 const express = require('express');
@@ -38,20 +35,67 @@ app.use(express.static('dist'));
 // My database
 const projectData = { geoData: [], weatherData: [], pixabayImages: [] };
 
-// set API credentias
-const textapi = new AYLIENTextAPI({
-  application_id: process.env.API_ID,
-  application_key: process.env.API_KEY,
-});
+// GeoNames Web Services
+const baseURLGeoNames = 'http://api.geonames.org/searchJSON?q=';
+const userName = process.env.KEY1;
 
-/* Routers*/
-app.get('/', (req, res) => {
-  res.sendFile('dist/index.html');
-  res.send(projectData);
-});
+// Query data GeoNames - GET request
+const getGeoName = async (baseURL, cityName) => {
+  const urlToFetch = `${baseURL}${encodeURIComponent(
+    cityName
+  )}&maxRows=1&username=${userName}`;
 
-// Post router
-app.post('/geoPost', (req, res) => {
+  const response = await fetch(urlToFetch);
+  // console.log(response);
+
+  try {
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log('Error here: ', error);
+  }
+};
+
+// Weatherbit API
+const baseURLWeatherbit = 'http://api.weatherbit.io/v2.0/forecast/daily?';
+const weatherbitIpi = process.env.KEY2;
+
+// Query data Weatherbit - GET request
+const getWeatherbit = async (baseURL, lat, lng) => {
+  const urlToFetch = `${baseURL}lat=${lat}&lon=${lng}&key=${weatherbitIpi}`;
+
+  const response = await fetch(urlToFetch);
+
+  try {
+    const data = await response.json();
+    // console.log(data);
+    return data;
+  } catch (error) {
+    console.log('Error here: ', error);
+  }
+};
+
+// Pixabay API
+const baseURLPixabay = 'https://pixabay.com/api/';
+const pixabayIpi = process.env.KEY3;
+// Query data Weatherbit - GET request
+const getPixabay = async (baseURL, searchTerm) => {
+  const urlToFetch = `${baseURL}?key=${pixabayIpi}&q=${encodeURIComponent(
+    searchTerm
+  )}`;
+
+  const response = await fetch(urlToFetch);
+
+  try {
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log('Error here: ', error);
+  }
+};
+
+// Using get request to request data from the GeoName servers
+getGeoName(baseURLGeoNames, 'new york').then((geoData) => {
   const {
     toponymName,
     lat,
@@ -59,7 +103,7 @@ app.post('/geoPost', (req, res) => {
     countryName,
     population,
     countryCode,
-  } = req.body.geonames[0];
+  } = geoData.geonames[0];
   let geoNames = {};
 
   geoNames.city = toponymName;
@@ -71,48 +115,68 @@ app.post('/geoPost', (req, res) => {
 
   // pushing data to the database variable
   projectData.geoData.push(geoNames);
-  res.send(projectData);
-});
 
-app.post('/weatherPost', (req, res) => {
-  const { country_code, timezone } = req.body;
-  const daysWeather = [];
+  // Return always the latest data
+  const lastLat = projectData.geoData[projectData.geoData.length - 1].latitude;
+  const lastLng = projectData.geoData[projectData.geoData.length - 1].longitude;
 
-  req.body.data.forEach((dayWeather) => {
-    daysWeather.push({
-      appMaxTemp: dayWeather.app_max_temp,
-      appMinTemp: dayWeather.app_min_temp,
-      dateTime: dayWeather.datetime,
-      highTemp: dayWeather.high_temp,
-      lowTemp: dayWeather.low_temp,
-      sunriseTs: dayWeather.sunrise_ts,
-      sunsetTs: dayWeather.sunset_ts,
-      weatherDescription: dayWeather.weather.description,
+  // Using get request to request data from the Weatherbit servers
+  getWeatherbit(baseURLWeatherbit, lastLat, lastLng).then((data) => {
+    //Posting weather the data to database
+
+    const { country_code, timezone } = data;
+    const daysWeather = [];
+
+    data.data.forEach((dayWeather) => {
+      daysWeather.push({
+        appMaxTemp: dayWeather.app_max_temp,
+        appMinTemp: dayWeather.app_min_temp,
+        dateTime: dayWeather.datetime,
+        highTemp: dayWeather.high_temp,
+        lowTemp: dayWeather.low_temp,
+        sunriseTs: dayWeather.sunrise_ts,
+        sunsetTs: dayWeather.sunset_ts,
+        weatherDescription: dayWeather.weather.description,
+      });
+    });
+
+    let weatherData = {};
+
+    weatherData.timezone = timezone;
+    weatherData.weatherPerDay = daysWeather;
+
+    // pushing data to the database variable
+    projectData.weatherData.push(weatherData);
+
+    // To return always the latest data
+    const latestData =
+      projectData.weatherData[projectData.weatherData.length - 1];
+
+    // Using get request to request (Images) data from the Pixabay servers
+    getPixabay(baseURLPixabay, 'new york city').then((data) => {
+      //Posting image data to database
+      const { largeImageURL } = data.hits[0];
+
+      let imageData = {};
+
+      imageData.imageURL = largeImageURL;
+
+      // pushing data to the database variable
+      projectData.pixabayImages.push(imageData);
+
+      // Return always the latest image
+      const latestImageData =
+        projectData.pixabayImages[projectData.pixabayImages.length - 1];
+
+      console.log(projectData);
     });
   });
-
-  let weatherData = {};
-
-  weatherData.timezone = timezone;
-  weatherData.weatherPerDay = daysWeather;
-
-  // pushing data to the database variable
-  projectData.weatherData.push(weatherData);
-  res.send(projectData);
 });
 
-app.post('/imagesPost', (req, res) => {
-  const { largeImageURL } = req.body.hits[0];
-
-  let imageData = {};
-
-  imageData.imageURL = largeImageURL;
-
-  // pushing data to the database variable
-  projectData.pixabayImages.push(imageData);
+/* Routers*/
+app.get('/', (req, res) => {
+  res.sendFile('dist/index.html');
   res.send(projectData);
-
-  console.log(projectData);
 });
 
 // GET route that request all data from the database
