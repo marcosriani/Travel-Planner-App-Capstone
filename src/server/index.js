@@ -94,89 +94,98 @@ const getPixabay = async (baseURL, searchTerm) => {
   }
 };
 
-// Using get request to request data from the GeoName servers
-getGeoName(baseURLGeoNames, 'new york').then((geoData) => {
-  const {
-    toponymName,
-    lat,
-    lng,
-    countryName,
-    population,
-    countryCode,
-  } = geoData.geonames[0];
-  let geoNames = {};
-
-  geoNames.city = toponymName;
-  geoNames.latitude = lat;
-  geoNames.longitude = lng;
-  geoNames.country = countryName;
-  geoNames.population = population;
-  geoNames.countryCode = countryCode;
-
-  // pushing data to the database variable
-  projectData.geoData.push(geoNames);
-
-  // Return always the latest data
-  const lastLat = projectData.geoData[projectData.geoData.length - 1].latitude;
-  const lastLng = projectData.geoData[projectData.geoData.length - 1].longitude;
-
-  // Using get request to request data from the Weatherbit servers
-  getWeatherbit(baseURLWeatherbit, lastLat, lastLng).then((data) => {
-    //Posting weather the data to database
-
-    const { country_code, timezone } = data;
-    const daysWeather = [];
-
-    data.data.forEach((dayWeather) => {
-      daysWeather.push({
-        appMaxTemp: dayWeather.app_max_temp,
-        appMinTemp: dayWeather.app_min_temp,
-        dateTime: dayWeather.datetime,
-        highTemp: dayWeather.high_temp,
-        lowTemp: dayWeather.low_temp,
-        sunriseTs: dayWeather.sunrise_ts,
-        sunsetTs: dayWeather.sunset_ts,
-        weatherDescription: dayWeather.weather.description,
-      });
-    });
-
-    let weatherData = {};
-
-    weatherData.timezone = timezone;
-    weatherData.weatherPerDay = daysWeather;
-
-    // pushing data to the database variable
-    projectData.weatherData.push(weatherData);
-
-    // To return always the latest data
-    const latestData =
-      projectData.weatherData[projectData.weatherData.length - 1];
-
-    // Using get request to request (Images) data from the Pixabay servers
-    getPixabay(baseURLPixabay, 'new york city').then((data) => {
-      //Posting image data to database
-      const { largeImageURL } = data.hits[0];
-
-      let imageData = {};
-
-      imageData.imageURL = largeImageURL;
-
-      // pushing data to the database variable
-      projectData.pixabayImages.push(imageData);
-
-      // Return always the latest image
-      const latestImageData =
-        projectData.pixabayImages[projectData.pixabayImages.length - 1];
-
-      console.log(projectData);
-    });
-  });
-});
-
 /* Routers*/
 app.get('/', (req, res) => {
   res.sendFile('dist/index.html');
   res.send(projectData);
+});
+
+// Post route that post data from the client side to server side
+app.post('/query', (req, res) => {
+  const query = req.body.textInput;
+
+  // Using get request to request data from the GeoName servers
+  getGeoName(baseURLGeoNames, query).then((geoData) => {
+    const {
+      toponymName,
+      lat,
+      lng,
+      countryName,
+      population,
+      countryCode,
+    } = geoData.geonames[0];
+    let geoNames = {};
+
+    geoNames.city = toponymName;
+    geoNames.latitude = lat;
+    geoNames.longitude = lng;
+    geoNames.country = countryName;
+    geoNames.population = population;
+    geoNames.countryCode = countryCode;
+
+    // pushing data to the database variable
+    projectData.geoData.push(geoNames);
+
+    // Return always the latest data
+    const lastLat =
+      projectData.geoData[projectData.geoData.length - 1].latitude;
+    const lastLng =
+      projectData.geoData[projectData.geoData.length - 1].longitude;
+
+    // Using get request to request data from the Weatherbit servers
+    getWeatherbit(baseURLWeatherbit, lastLat, lastLng).then((data) => {
+      //Posting weather the data to database
+
+      const { country_code, timezone } = data;
+      const daysWeather = [];
+
+      data.data.forEach((dayWeather) => {
+        daysWeather.push({
+          appMaxTemp: dayWeather.app_max_temp,
+          appMinTemp: dayWeather.app_min_temp,
+          dateTime: dayWeather.datetime,
+          highTemp: dayWeather.high_temp,
+          lowTemp: dayWeather.low_temp,
+          sunriseTs: dayWeather.sunrise_ts,
+          sunsetTs: dayWeather.sunset_ts,
+          weatherDescription: dayWeather.weather.description,
+        });
+      });
+
+      let weatherData = {};
+
+      weatherData.timezone = timezone;
+      weatherData.weatherPerDay = daysWeather;
+
+      // pushing data to the database variable
+      projectData.weatherData.push(weatherData);
+
+      // Using get request to request (Images) data from the Pixabay servers
+      getPixabay(baseURLPixabay, `${query} city`).then((data) => {
+        //Posting image data to database
+        const { largeImageURL } = data.hits[0];
+
+        let imageData = {};
+
+        imageData.imageURL = largeImageURL;
+
+        // pushing data to the database variable
+        projectData.pixabayImages.push(imageData);
+
+        // To return always the latest data
+        const latestData =
+          projectData.weatherData[projectData.weatherData.length - 1];
+
+        // Return always the latest image
+        const latestImageData =
+          projectData.pixabayImages[projectData.pixabayImages.length - 1];
+
+        res.send(projectData);
+
+        console.log(projectData);
+      });
+    });
+  });
 });
 
 // GET route that request all data from the database

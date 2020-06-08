@@ -16,7 +16,8 @@ function handleSubmit(event) {
 
   //  text was put into the form field
   const formField = document.getElementById('name');
-  let formText = formField.value;
+  const formText = formField.value;
+  let formtTextObj = { textInput: formField.value };
 
   // Execute button clicked function
   Client.validatorAndButton(formText, resultTitle, containerDiv);
@@ -51,6 +52,21 @@ function handleSubmit(event) {
       console.log('Error here: ', error);
     }
   };
+
+  // Posting input text into server so that it's used as a query term in the APIs
+  postData('http://localhost:3000/query', formtTextObj).then((data) => {
+    getAllData().then((data) => {
+      // To return always the latest data
+      const latestGeoData = data.geoData[data.geoData.length - 1];
+      const latestWeatherData = data.weatherData[data.weatherData.length - 1];
+      const latestImageData = data.pixabayImages[data.pixabayImages.length - 1];
+
+      console.log(latestGeoData);
+      console.log(latestWeatherData);
+      console.log(latestImageData);
+      console.log(data);
+    });
+  });
 }
 
 export { handleSubmit };
