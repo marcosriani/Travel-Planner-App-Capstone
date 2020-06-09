@@ -33,7 +33,12 @@ app.use(bodyParser.json());
 app.use(express.static('dist'));
 
 // My database
-const projectData = { geoData: [], weatherData: [], pixabayImages: [] };
+const projectData = {
+  geoData: [],
+  weatherData: [],
+  pixabayImages: [],
+  countryInfo: [],
+};
 
 // GeoNames Web Services
 const baseURLGeoNames = 'http://api.geonames.org/searchJSON?q=';
@@ -83,6 +88,22 @@ const getPixabay = async (baseURL, searchTerm) => {
   const urlToFetch = `${baseURL}?key=${pixabayIpi}&q=${encodeURIComponent(
     searchTerm
   )}`;
+
+  const response = await fetch(urlToFetch);
+
+  try {
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log('Error here: ', error);
+  }
+};
+
+// REST Countries API
+const baseURLRestCountries = 'https://restcountries.eu/rest/v2/name/';
+// Query data Weatherbit - GET request
+const getRestCountries = async (searchTerm) => {
+  const urlToFetch = `${baseURLRestCountries}${searchTerm}`;
 
   const response = await fetch(urlToFetch);
 
@@ -154,14 +175,21 @@ app.post('/query', (req, res) => {
 
       let weatherData = {};
 
+      weatherData.countryCode = country_code;
       weatherData.timezone = timezone;
       weatherData.weatherPerDay = daysWeather;
 
       // pushing data to the database variable
       projectData.weatherData.push(weatherData);
 
+      // Get the latest geo data with city name and country
+      const latestGeoData = projectData.geoData[projectData.geoData.length - 1];
+
       // Using get request to request (Images) data from the Pixabay servers
-      getPixabay(baseURLPixabay, `${query} city`).then((data) => {
+      getPixabay(
+        baseURLPixabay,
+        `${latestGeoData.city} ${latestGeoData.country}`
+      ).then((data) => {
         //Posting image data to database
         const { largeImageURL } = data.hits[0];
 
@@ -172,17 +200,33 @@ app.post('/query', (req, res) => {
         // pushing data to the database variable
         projectData.pixabayImages.push(imageData);
 
-        // To return always the latest data
-        const latestData =
-          projectData.weatherData[projectData.weatherData.length - 1];
+        getRestCountries(latestGeoData.country).then((data) => {
+          const {
+            name,
+            callingCodes,
+            capital,
+            region,
+            demonym,
+            flag,
+            languages,
+            currencies,
+          } = data[0];
 
-        // Return always the latest image
-        const latestImageData =
-          projectData.pixabayImages[projectData.pixabayImages.length - 1];
+          const countryAPIData = {};
 
-        res.send(projectData);
+          countryAPIData.name = name;
+          countryAPIData.callingCodes = callingCodes;
+          countryAPIData.capital = capital;
+          countryAPIData.region = region;
+          countryAPIData.demonym = demonym;
+          countryAPIData.flag = flag;
+          countryAPIData.languages = languages;
+          countryAPIData.currencies = currencies;
 
-        console.log(projectData);
+          projectData.countryInfo.push(countryAPIData);
+
+          res.send(projectData);
+        });
       });
     });
   });

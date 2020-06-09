@@ -85,12 +85,15 @@ function handleSubmit(event) {
   dateText.length === 10
     ? postData('http://localhost:3000/query', formtTextObj).then((data) => {
         getAllData().then((data) => {
+          console.log(data);
           // To return always the latest data
           const latestGeoData = data.geoData[data.geoData.length - 1];
           const latestWeatherData =
             data.weatherData[data.weatherData.length - 1];
           const latestImageData =
             data.pixabayImages[data.pixabayImages.length - 1];
+          const latestCountryData =
+            data.countryInfo[data.countryInfo.length - 1];
 
           const cityTrip = latestGeoData.city;
           const countryTrip = latestGeoData.countryCode;
@@ -103,6 +106,12 @@ function handleSubmit(event) {
           const tripWeatherDescription =
             latestWeatherData.weatherPerDay[0].weatherDescription;
           const imageTrip = latestImageData.imageURL;
+          const countryName = latestCountryData.name;
+          const region = latestCountryData.region;
+          const capital = latestCountryData.capital;
+          const callingCodes = latestCountryData.callingCodes;
+          const languages = latestCountryData.languages[0].nativeName;
+          const currencies = latestCountryData.currencies[0].name;
 
           cleanUi();
           updateUI(
@@ -113,7 +122,13 @@ function handleSubmit(event) {
             howFar,
             tripWeatherMax,
             tripWeatherMin,
-            tripWeatherDescription
+            tripWeatherDescription,
+            countryName,
+            region,
+            capital,
+            callingCodes,
+            languages,
+            currencies
           );
         });
       })
@@ -149,7 +164,13 @@ function handleSubmit(event) {
     daysFromNow,
     weatherMax,
     weatherMin,
-    weatherDescription
+    weatherDescription,
+    countryName,
+    region,
+    capital,
+    callingCodes,
+    languages,
+    currencies
   ) => {
     // Wrapper div
     const tripDiv = document.querySelector('#trip');
@@ -251,6 +272,18 @@ function handleSubmit(event) {
     weatherThere.appendChild(weatherThereP2);
     weatherThere.appendChild(weatherThereP3);
     wrapperDiv2.appendChild(weatherThere);
+
+    // Country info
+    const countryDiv = element().div;
+    const CountryP1 = element().p;
+
+    countryDiv.classList = 'countryDiv';
+    CountryP1.classList = 'CountryP1';
+
+    CountryP1.innerHTML = `Cool that you are going to ${countryName} in ${region}, do you know that it's capital is ${capital}, currencie ${currencies}, language ${languages}, and calling code: ${callingCodes}?`;
+
+    countryDiv.appendChild(CountryP1);
+    wrapperDiv2.appendChild(countryDiv);
 
     // Make container visable
     containerDiv.style.display = 'block';
