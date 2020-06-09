@@ -238,7 +238,7 @@ app.get('/allData', (req, res) => {
 });
 
 // Designates what port the app will listen to for incoming requests
-const port = 3000;
+const port = (port = process.env.PORT || 3000);
 
 app.listen(port, () => {
   console.log(`'App running on port ${port}`);
