@@ -3,8 +3,8 @@ const supertest = require('supertest');
 const request = supertest(app);
 
 describe('Post endpoint', () => {
-  it('/all', async (done) => {
-    const response = await request.get('/all');
+  it('/allData', async (done) => {
+    const response = await request.get('/allData');
     expect(response.status).toBe(200);
     done();
   });

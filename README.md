@@ -11,8 +11,11 @@ The goal of this project was to have practice with:
 - Service workers
 - Using APIs and creating requests to external urls
 
-The Aylien API used was a Natural Language Processing. NLPs leverage machine learning and deep learning create a program that can interpret natural human speech. Natural language processing (NLP) is a subfield of computer science, information engineering, and artificial intelligence concerned with the interactions between computers and human (natural) languages, in particular how to program computers to
-process and analyze large amounts of natural language data.
+APIs used
+Geonames - Used to get geolocation data
+Weatherbit - Used to get weather data
+Pixabay - Used to get image data
+Restcountries - Used to get country data
 
 ## Getting started
 
@@ -22,18 +25,33 @@ Clone or fork the project, you will still need to install everything:
 
 - `npm install`
 
+## Dependencies
+
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "node-fetch": "^2.6.0",
+    "regenerator-runtime": "^0.13.5",
+    "supertest": "^4.0.2",
+    "webpack-cli": "^3.3.11"
+
 ## Setting up the API
 
-You need credencial of the Aylien API to validade your requests.
-https://developer.aylien.com/signup
+You need credencial of the geonames, weatherbit, and pixabay API to validade your requests.
+
+http://www.geonames.org/export/web-services.html
+https://www.weatherbit.io/account/create
+https://pixabay.com/api/docs/
+https://restcountries.eu/
 
 ### Step 4: Environment Variables
 
 Next we need to declare our API keys, which will look something like this:
 
 ```
-// set aylien API credentias
-var textapi = new aylien({
+// set APIs credentias
+var textapi = new APINAME({
   application_id: "your-api-id",
   application_key: "your-key"
 });
