@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1591666629317" clover="3.2.0">
-  <project timestamp="1591666629317" name="All files">
+<coverage generated="1591666936800" clover="3.2.0">
+  <project timestamp="1591666936800" name="All files">
     <metrics statements="165" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="13" coveredmethods="0" elements="190" coveredelements="0" complexity="0" loc="165" ncloc="165" packages="1" files="2" classes="2"/>
     <file name="formHandler.js" path="/Users/marcosriani/Documents/Web-Development-2020/Udacity/FEND-Capstone-Travel App/src/client/js/formHandler.js">
       <metrics statements="148" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="9" coveredmethods="0"/>

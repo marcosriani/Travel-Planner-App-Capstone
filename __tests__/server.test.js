@@ -1,9 +1,11 @@
 const app = require('../src/server/index');
-const request = require('supertest');
+const supertest = require('supertest');
+const request = supertest(app);
 
-describe('get /all', () => {
-  test('should return a 200', async () => {
-    const response = await request(app).get('/all');
+describe('Post endpoint', () => {
+  it('/all', async (done) => {
+    const response = await request.get('/all');
     expect(response.status).toBe(200);
+    done();
   });
 });

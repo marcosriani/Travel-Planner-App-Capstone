@@ -244,4 +244,4 @@ app.listen(port, () => {
   console.log(`'App running on port ${port}`);
 });
 
-module.exports.getPixabay = getPixabay;
+module.exports = app;
