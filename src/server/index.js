@@ -119,9 +119,7 @@ const getRestCountries = async (searchTerm) => {
 //   res.send(projectData);
 // });
 app.get('/', (req, res) => {
-  // res.sendFile('dist/index.html');
-  // res.sendFile('index.html', { root: path.join(__dirname, 'dist') });
-  res.sendFile('index.html', { root: path.join(__dirname, '/dist') });
+  res.sendFile('dist/index.html');
   res.send(projectData);
 });
 
@@ -246,6 +244,13 @@ const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
   console.log(`'App running on port ${port}`);
+});
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('dist'));
+}
+app.get('*', (request, response) => {
+  response.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
 module.exports = app;
