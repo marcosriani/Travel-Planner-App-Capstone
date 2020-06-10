@@ -16,6 +16,9 @@ module.exports = {
   devServer: {
     port: 3000,
   },
+  node: {
+    __dirname: false,
+  },
   module: {
     rules: [
       {

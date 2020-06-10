@@ -113,6 +113,11 @@ const getRestCountries = async (searchTerm) => {
 };
 
 /* Routers*/
+
+// app.get('/', function (req, res) {
+//   res.sendFile(path.resolve('dist/index.html'));
+// });
+
 app.get('/', (req, res) => {
   res.sendFile('dist/index.html');
   res.send(projectData);
