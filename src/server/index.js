@@ -13,9 +13,6 @@ var path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-// Require the Aylien npm package
-const AYLIENTextAPI = require('aylien_textapi');
-
 // Start up an instance of app
 const app = express();
 
