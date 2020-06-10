@@ -121,7 +121,7 @@ const getRestCountries = async (searchTerm) => {
 app.get('/', (req, res) => {
   // res.sendFile('dist/index.html');
   // res.sendFile('index.html', { root: path.join(__dirname, 'dist') });
-  res.sendFile('index.html', { root: path.join(__dirname, '../dist') });
+  res.sendFile('index.html', { root: path.join(__dirname, '/dist') });
   res.send(projectData);
 });
 
