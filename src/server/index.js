@@ -27,7 +27,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // Initialize the main project folder
-app.use(express.static('dist'));
+// app.use(express.static('dist'));
+app.use(express.static(__dirname + '/dist'));
 
 // My database
 const projectData = {
@@ -113,10 +114,6 @@ const getRestCountries = async (searchTerm) => {
 };
 
 /* Routers*/
-
-// app.get('/', function (req, res) {
-//   res.sendFile(path.resolve('dist/index.html'));
-// });
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname, '../server/index.js', 'dist/index.html');
