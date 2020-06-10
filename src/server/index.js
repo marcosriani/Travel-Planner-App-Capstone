@@ -120,7 +120,6 @@ const getRestCountries = async (searchTerm) => {
 // });
 app.get('/', (req, res) => {
   res.sendFile(path.resolve('dist/index.html'));
-  res.send(projectData);
 });
 
 // Post route that post data from the client side to server side
