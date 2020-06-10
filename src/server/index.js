@@ -119,7 +119,7 @@ const getRestCountries = async (searchTerm) => {
 // });
 
 app.get('/', (req, res) => {
-  res.sendFile('dist/index.html');
+  res.sendFile(__dirname, '../server/index.js', 'dist/index.html');
   res.send(projectData);
 });
 
